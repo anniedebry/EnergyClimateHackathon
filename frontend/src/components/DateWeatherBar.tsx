@@ -61,7 +61,7 @@ export default function DateWeatherBar({
           </div>
           <input
             type="date"
-            min="2021-01-01"
+            min="2022-01-01"
             max="2025-12-31"
             value={selectedDate}
             onChange={(e) => onDateChange(e.target.value)}
@@ -78,7 +78,6 @@ export default function DateWeatherBar({
               letterSpacing: 1,
             }}
           />
-          <div style={{ fontSize: font.md, color: colors.textMuted }}>2025</div>
         </div>
 
         {/* Weather */}
