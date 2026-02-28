@@ -69,7 +69,7 @@ export default function CostEfficiencyChart({
       label="Cost Efficiency"
       subtitle="$/MWh by energy source over 24 hours — toggle sources to compare"
       badge="DAILY USAGE"
-      badgeColor={colors.orange}
+      badgeColor={colors.textSecondary}
     >
       {/* Filter buttons */}
       <div

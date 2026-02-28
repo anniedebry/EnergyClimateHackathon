@@ -1,4 +1,4 @@
-import { colors, font, radius, spacing } from "../theme";
+import { colors, font, spacing } from "../theme";
 
 export default function Header() {
   return (
@@ -10,7 +10,7 @@ export default function Header() {
       alignItems: "center",
       background: colors.bgHeader,
     }}>
-      <div style={{ display: "flex", alignItems: "center", gap: spacing.md }}>
+      <div style={{ display: "flex", alignItems: "center", gap: spacing.lg }}>
         <div style={{
           width: 10, height: 10, borderRadius: "50%",
           background: colors.actual,
@@ -19,21 +19,12 @@ export default function Header() {
         }} />
         <div>
           <div style={{ fontSize: font.lg, color: colors.textPrimary, letterSpacing: 2, fontWeight: 500 }}>
-            SALT LAKE CITY GRID INTELLIGENCE
+            Utah Energy Optimization
           </div>
           <div style={{ fontSize: font.sm, color: colors.textMuted, letterSpacing: 1, marginTop: 2 }}>
-            Utah Energy Analytics · Rocky Mountain Power Territory
+            Created by Andrew Vasquez, Annie DeBry, Cameron Kato, Ian Whatley, and Samantha Shiba
           </div>
         </div>
-      </div>
-      <div style={{
-        background: `${colors.actual}20`,
-        border: `1px solid ${colors.actual}60`,
-        padding: `6px ${spacing.md}px`,
-        borderRadius: radius.sm,
-        fontSize: font.xs, color: colors.actual, letterSpacing: 2,
-      }}>
-        GOVERNMENT & UTILITY USE
       </div>
     </div>
   );

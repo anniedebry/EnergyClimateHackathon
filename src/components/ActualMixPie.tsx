@@ -108,13 +108,13 @@ export default function ActualMixPie({ avgMix }: ActualMixPieProps) {
                 flexShrink: 0,
               }}
             />
-            <span style={{ fontSize: font.sm, color: colors.textMuted }}>
+            <span style={{ fontSize: font.md, color: colors.textMuted }}>
               {ENERGY_LABELS[t]}
             </span>
             <span
               style={{
                 fontSize: font.sm,
-                color: colors.textSecondary,
+                color: colors.actual,
                 fontWeight: 500,
               }}
             >

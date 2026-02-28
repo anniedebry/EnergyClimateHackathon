@@ -3,6 +3,7 @@ import { colors, font, radius, spacing } from "../theme";
 
 interface ChartCardProps {
   label: string;
+  labelColor?: string;
   subtitle?: string;
   badge?: string;
   badgeColor?: string;
@@ -11,6 +12,7 @@ interface ChartCardProps {
 
 export default function ChartCard({
   label,
+  labelColor = colors.textPrimary,
   subtitle,
   badge,
   badgeColor = colors.actual,
@@ -37,7 +39,7 @@ export default function ChartCard({
           <div
             style={{
               fontSize: font.xl,
-              color: colors.textPrimary,
+              color: labelColor,
               letterSpacing: 1,
               fontWeight: 500,
               marginBottom: spacing.xs / 2,
@@ -46,7 +48,7 @@ export default function ChartCard({
             {label}
           </div>
           {subtitle && (
-            <div style={{ fontSize: font.lg, color: colors.textSecondary }}>
+            <div style={{ fontSize: font.lg, color: colors.textMuted }}>
               {subtitle}
             </div>
           )}

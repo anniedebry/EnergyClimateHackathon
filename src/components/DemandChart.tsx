@@ -54,7 +54,9 @@ const DemandTooltip = ({ active, payload, label }: TooltipProps) => {
         </p>
       )}
       {optimal && (
-        <p style={{ color: colors.optimal, fontSize: font.md, margin: "4px 0" }}>
+        <p
+          style={{ color: colors.optimal, fontSize: font.md, margin: "4px 0" }}
+        >
           Optimal:{" "}
           <span style={{ color: colors.textPrimary }}>
             {(optimal.value as number).toLocaleString()} MW
@@ -88,7 +90,7 @@ export default function DemandChart({
       label="Grid Demand — Actual vs Optimal Mix"
       subtitle="What we're using vs what we could be using at the cheapest source ratio"
       badge="OPTIMIZATION VIEW"
-      badgeColor={colors.optimalGap}
+      badgeColor={colors.optimal}
     >
       {/* Legend */}
       <div
@@ -145,13 +147,17 @@ export default function DemandChart({
           margin={{ top: 20, right: 8, left: 0, bottom: 0 }}
         >
           <defs>
-            <linearGradient id="actualGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor={colors.actual} stopOpacity={0.12} />
-              <stop offset="95%" stopColor={colors.actual} stopOpacity={0} />
-            </linearGradient>
-            <linearGradient id="optGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor={colors.optimal} stopOpacity={0.2} />
-              <stop offset="95%" stopColor={colors.optimal} stopOpacity={0.04} />
+            <linearGradient id="gapGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop
+                offset="0%"
+                stopColor={colors.optimalGap}
+                stopOpacity={0.7}
+              />
+              <stop
+                offset="100%"
+                stopColor={colors.optimalGap}
+                stopOpacity={0.2}
+              />
             </linearGradient>
           </defs>
           <CartesianGrid
@@ -188,16 +194,27 @@ export default function DemandChart({
             stroke={colors.optimal}
             strokeWidth={2.5}
             strokeDasharray="7 3"
-            fill="url(#optGrad)"
+            fill="transparent"
             dot={false}
             name="Optimal Mix"
+            stackId="stack"
+          />
+          <Area
+            type="monotone"
+            dataKey="gap"
+            stroke="none"
+            fill="url(#gapGrad)"
+            fillOpacity={0.5}
+            dot={false}
+            name="Reducible Gap"
+            stackId="stack"
           />
           <Area
             type="monotone"
             dataKey="demand"
             stroke={colors.actual}
             strokeWidth={3}
-            fill="url(#actualGrad)"
+            fill="transparent"
             dot={false}
             name="Actual Demand"
             activeDot={{
@@ -215,8 +232,8 @@ export default function DemandChart({
         style={{
           marginTop: spacing.md,
           padding: `${spacing.sm}px 18px`,
-          background: `${colors.optimalGap}08`,
-          border: `1px solid ${colors.optimalGap}30`,
+          background: `${colors.bgCard}08`,
+          border: `2px solid ${colors.optimal}30`,
           borderRadius: radius.md,
           display: "flex",
           justifyContent: "space-between",
@@ -224,11 +241,15 @@ export default function DemandChart({
         }}
       >
         <span
-          style={{ fontSize: font.sm, color: colors.optimalGap, letterSpacing: 1 }}
+          style={{
+            fontSize: font.sm,
+            color: colors.optimal,
+            letterSpacing: 1,
+          }}
         >
           DAILY OPTIMIZATION POTENTIAL
         </span>
-        <span style={{ fontSize: font.sm, color: colors.optimalGap }}>
+        <span style={{ fontSize: font.sm, color: colors.optimal }}>
           ↓ <strong>{avgSavingsPct}%</strong> avg reduction ·{" "}
           <strong>{totalSavings.toLocaleString()}</strong> MW·h reducible today
         </span>
