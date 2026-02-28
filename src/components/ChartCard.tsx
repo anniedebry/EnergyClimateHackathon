@@ -1,26 +1,39 @@
 import React from "react";
+import { colors, font, radius, spacing } from "../theme";
 
 interface ChartCardProps {
   label: string;
-  subtitle: string;
+  subtitle?: string;
   badge?: string;
   badgeColor?: string;
   children: React.ReactNode;
 }
 
-export default function ChartCard({ label, subtitle, badge, badgeColor = "#00FF88", children }: ChartCardProps) {
+export default function ChartCard({ label, subtitle, badge, badgeColor = colors.green, children }: ChartCardProps) {
   return (
-    <div style={{ background: "#0A0F1E", border: "1px solid #1E3A5F", borderRadius: 6, padding: "20px 22px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
+    <div style={{
+      background: colors.bgCard,
+      border: `1px solid ${colors.border}`,
+      borderRadius: radius.lg,
+      padding: "24px 28px",
+    }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: spacing.md }}>
         <div>
-          <div style={{ fontSize: 8, color: "#334155", letterSpacing: 3, marginBottom: 4 }}>{label}</div>
-          <div style={{ fontSize: 11, color: "#475569" }}>{subtitle}</div>
+          <div style={{ fontSize: font.lg, color: colors.textPrimary, letterSpacing: 1, fontWeight: 500, marginBottom: spacing.xs / 2 }}>
+            {label}
+          </div>
+          {subtitle && (
+            <div style={{ fontSize: font.md, color: colors.textSecondary }}>{subtitle}</div>
+          )}
         </div>
         {badge && (
           <div style={{
-            background: `${badgeColor}15`, border: `1px solid ${badgeColor}40`,
-            color: badgeColor, fontSize: 8, padding: "3px 10px", borderRadius: 3,
-            letterSpacing: 2, whiteSpace: "nowrap",
+            background: `${badgeColor}18`,
+            border: `1px solid ${badgeColor}50`,
+            color: badgeColor,
+            fontSize: font.xs, padding: `4px ${spacing.sm}px`,
+            borderRadius: radius.sm, letterSpacing: 2,
+            whiteSpace: "nowrap", fontWeight: 500,
           }}>
             {badge}
           </div>

@@ -1,15 +1,38 @@
+import { colors, font, radius, spacing } from "../theme";
+
 export default function Header() {
   return (
-    <div style={{ borderBottom: "1px solid #0D1C30", padding: "13px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#070C18" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-        <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#00FF88", boxShadow: "0 0 10px #00FF88", animation: "pulse 2s infinite" }} />
-        <span style={{ fontSize: 10, color: "#00FF88", letterSpacing: 3 }}>SALT LAKE CITY  ·  GRID INTELLIGENCE PLATFORM</span>
-        <span style={{ color: "#0D1C30" }}>|</span>
-        <span style={{ fontSize: 9, color: "#1E3A5F", letterSpacing: 2 }}>Utah Energy Analytics</span>
+    <div style={{
+      borderBottom: `1px solid ${colors.border}`,
+      padding: `18px ${spacing.xl}px`,
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      background: colors.bgHeader,
+    }}>
+      <div style={{ display: "flex", alignItems: "center", gap: spacing.md }}>
+        <div style={{
+          width: 10, height: 10, borderRadius: "50%",
+          background: colors.green, boxShadow: `0 0 14px ${colors.green}`,
+          animation: "pulse 2s infinite", flexShrink: 0,
+        }} />
+        <div>
+          <div style={{ fontSize: font.lg, color: colors.textPrimary, letterSpacing: 2, fontWeight: 400 }}>
+            SALT LAKE CITY GRID INTELLIGENCE
+          </div>
+          <div style={{ fontSize: font.sm, color: colors.textMuted, letterSpacing: 1, marginTop: 2 }}>
+            Utah Energy Analytics · Rocky Mountain Power Territory
+          </div>
+        </div>
       </div>
-      <div style={{ display: "flex", gap: 20 }}>
-        <span style={{ fontSize: 8, color: "#1E3A5F", letterSpacing: 2 }}>ROCKY MOUNTAIN POWER TERRITORY</span>
-        <span style={{ fontSize: 8, color: "#1E3A5F", letterSpacing: 2 }}>GOVERNMENT & UTILITY USE</span>
+      <div style={{
+        background: `${colors.green}12`,
+        border: `1px solid ${colors.green}40`,
+        padding: `6px ${spacing.md}px`,
+        borderRadius: radius.sm,
+        fontSize: font.xs, color: colors.green, letterSpacing: 2,
+      }}>
+        GOVERNMENT & UTILITY USE
       </div>
     </div>
   );

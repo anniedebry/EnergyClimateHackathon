@@ -3,6 +3,7 @@ import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YA
 import ChartCard from "./ChartCard";
 import { ENERGY_COLORS, ENERGY_LABELS, ENERGY_TYPES } from "../data/constants";
 import type { HourData, TooltipProps } from "../types/energy";
+import { colors, font, radius, spacing } from "../theme";
 
 interface CostEfficiencyChartProps {
   hours: HourData[];
@@ -11,14 +12,11 @@ interface CostEfficiencyChartProps {
 const CostTooltip = ({ active, payload, label }: TooltipProps) => {
   if (!active || !payload?.length) return null;
   return (
-    <div style={{ background: "#080D1A", border: "1px solid #1E3A5F", padding: "10px 14px", borderRadius: 4, minWidth: 180 }}>
-      <p style={{ color: "#64748B", fontSize: 10, marginBottom: 8, fontFamily: "monospace", letterSpacing: 1 }}>{label}</p>
+    <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, padding: "12px 16px", borderRadius: radius.md, minWidth: 180 }}>
+      <p style={{ color: colors.textMuted, fontSize: font.sm, marginBottom: 10, letterSpacing: 1 }}>{label}</p>
       {payload.map((p, i) => (
-        <p key={i} style={{ color: p.color, fontSize: 11, margin: "3px 0", fontFamily: "monospace" }}>
-          <span style={{ color: "#475569" }}>{p.name}: </span>
-          <span style={{ color: "#E2E8F0" }}>
-            {typeof p.value === "number" ? p.value.toLocaleString() : p.value}{p.unit ?? ""}
-          </span>
+        <p key={i} style={{ color: p.color, fontSize: font.md, margin: "4px 0" }}>
+          {p.name}: <span style={{ color: colors.textPrimary }}>{typeof p.value === "number" ? p.value.toLocaleString() : p.value} $/MWh</span>
         </p>
       ))}
     </div>
@@ -27,36 +25,35 @@ const CostTooltip = ({ active, payload, label }: TooltipProps) => {
 
 export default function CostEfficiencyChart({ hours }: CostEfficiencyChartProps) {
   const [activeSources, setActiveSources] = useState<string[]>(ENERGY_TYPES);
-
   const toggle = (t: string) =>
     setActiveSources(prev => prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t]);
 
   return (
-    <ChartCard label="Cost Efficiency" subtitle="$/MWh by Energy Source — 24-Hour Rate Curve" badge="DAILY USAGE" badgeColor="#F97316">
-
+    <ChartCard label="Cost Efficiency" subtitle="$/MWh by energy source over 24 hours — toggle sources to compare" badge="DAILY USAGE" badgeColor={colors.orange}>
       {/* Filter buttons */}
-      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
+      <div style={{ display: "flex", gap: spacing.xs, flexWrap: "wrap", marginBottom: spacing.md }}>
         {ENERGY_TYPES.map(t => (
           <button key={t} onClick={() => toggle(t)} style={{
-            background: activeSources.includes(t) ? `${ENERGY_COLORS[t]}18` : "transparent",
-            border: `1px solid ${activeSources.includes(t) ? ENERGY_COLORS[t] : "#1E3A5F"}`,
-            color: activeSources.includes(t) ? ENERGY_COLORS[t] : "#334155",
-            padding: "2px 9px", borderRadius: 3, fontSize: 8,
-            fontFamily: "monospace", cursor: "pointer", letterSpacing: 1, transition: "all 0.15s",
+            background: activeSources.includes(t) ? `${ENERGY_COLORS[t]}20` : "transparent",
+            border: `1.5px solid ${activeSources.includes(t) ? ENERGY_COLORS[t] : colors.border}`,
+            color: activeSources.includes(t) ? ENERGY_COLORS[t] : colors.textMuted,
+            padding: `5px 14px`, borderRadius: radius.sm, fontSize: font.sm,
+            fontFamily: font.family, cursor: "pointer", letterSpacing: 1,
+            transition: "all 0.15s", fontWeight: 500,
           }}>
-            {ENERGY_LABELS[t].toUpperCase()}
+            {ENERGY_LABELS[t]}
           </button>
         ))}
       </div>
 
-      <ResponsiveContainer width="100%" height={200}>
-        <LineChart data={hours} margin={{ top: 4, right: 4, left: -14, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="2 6" stroke="#0D1C30" vertical={false} />
-          <XAxis dataKey="hour" tick={{ fill: "#334155", fontSize: 8, fontFamily: "monospace" }} tickLine={false} axisLine={{ stroke: "#1E3A5F" }} interval={2} />
-          <YAxis tick={{ fill: "#334155", fontSize: 8, fontFamily: "monospace" }} tickLine={false} axisLine={false} unit=" $" width={44} />
+      <ResponsiveContainer width="100%" height={220}>
+        <LineChart data={hours} margin={{ top: 20, right: 8, left: 0, bottom: 0 }}>
+          <CartesianGrid strokeDasharray="3 6" stroke={colors.borderDim} vertical={false} />
+          <XAxis dataKey="hour" tick={{ fill: colors.textMuted, fontSize: font.sm, fontFamily: font.family }} tickLine={false} axisLine={{ stroke: colors.border }} interval={2} />
+          <YAxis tick={{ fill: colors.textMuted, fontSize: font.sm, fontFamily: font.family }} tickLine={false} axisLine={false} unit=" $" width={52} />
           <Tooltip content={<CostTooltip />} />
           {ENERGY_TYPES.filter(t => activeSources.includes(t)).map(t => (
-            <Line key={t} type="monotone" dataKey={`${t}_cost`} stroke={ENERGY_COLORS[t]} strokeWidth={1.5} dot={false} name={ENERGY_LABELS[t]} unit=" $/MWh" activeDot={{ r: 3, fill: ENERGY_COLORS[t] }} />
+            <Line key={t} type="monotone" dataKey={`${t}_cost`} stroke={ENERGY_COLORS[t]} strokeWidth={2} dot={false} name={ENERGY_LABELS[t]} activeDot={{ r: 4, fill: ENERGY_COLORS[t] }} />
           ))}
         </LineChart>
       </ResponsiveContainer>

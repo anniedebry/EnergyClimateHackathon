@@ -80,12 +80,7 @@ export default function EnergyDashboard() {
       </div>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@100;300;400&display=swap');
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.2) sepia(1) saturate(6) hue-rotate(100deg); cursor: pointer; }
-        ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: #060B18; } ::-webkit-scrollbar-thumb { background: #1E3A5F; }
-        button:hover { opacity: 0.8; }
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap');
       `}</style>
     </div>
   );
