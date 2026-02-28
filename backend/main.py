@@ -155,6 +155,7 @@ async def get_energy_day(date: str):
     # ── Validate required columns exist (same pattern as your other endpoints) ──
     required = [
         "Hour", "Demand", "Demand forecast",
+        "CO2 Emissions Generated",
         "Adjusted COL Gen", "Adjusted NG Gen", "Adjusted NUC Gen",
         "Adjusted SUN Gen", "Adjusted WND Gen", "Adjusted WAT Gen", "Adjusted GEO Gen"
     ]
@@ -207,10 +208,12 @@ async def get_energy_day(date: str):
         k: round(sum(h[f"{k}_pct"] for h in hours) / max(len(hours), 1), 1)
         for k in energy_keys
     }
+    total_co2 = round(float(day_df["CO2 Emissions Generated"].sum()), 2)
 
     return {
         "hours":  hours,
         "avgMix": avg_mix,
+        "totalCO2": total_co2,
     }
 
 @app.get("/api/debug/columns")

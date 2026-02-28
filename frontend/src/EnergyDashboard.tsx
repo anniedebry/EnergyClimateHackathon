@@ -126,6 +126,7 @@ export default function EnergyDashboard() {
           totalSavings={totalSavings}
           avgSavingsPct={avgSavingsPct}
           potentialSavings={potentialSavings}
+          totalCO2={data.totalCO2 ?? 0}
         />
 
         {/* Row 1 */}

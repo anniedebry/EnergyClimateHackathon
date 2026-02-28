@@ -12,6 +12,7 @@ interface DateWeatherBarProps {
   totalSavings: number;
   avgSavingsPct: number;
   potentialSavings: number;
+  totalCO2: number;
 }
 
 export default function DateWeatherBar({
@@ -19,11 +20,11 @@ export default function DateWeatherBar({
   onDateChange,
   data,
   totalActual,
-  totalOptimal,
   peakDemand,
   peakHour,
   totalSavings,
   avgSavingsPct,
+  totalCO2,
 }: DateWeatherBarProps) {
   return (
     <div
@@ -198,10 +199,10 @@ export default function DateWeatherBar({
               color: colors.textPrimary,
             },
             {
-              label: "SAVINGS",
-              val: totalOptimal.toLocaleString(),
-              unit: "$",
-              sub: "Using Optimal Mix",
+              label: "CARBON FOOTPRINT",
+              val: totalCO2.toLocaleString(),
+              unit: "MT CO₂",
+              sub: "Total Daily Emissions",
               color: colors.textPrimary,
             },
           ].map((k, i) => (

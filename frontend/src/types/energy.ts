@@ -19,6 +19,7 @@ export type HourData = {
 export type DayData = {
   hours: HourData[];
   avgMix: Record<EnergyType, number>;
+  totalCO2: number;   // ← add this
   weather: {
     temp: number;
     condition: string;
