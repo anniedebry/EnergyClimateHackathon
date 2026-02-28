@@ -25,7 +25,52 @@ CSV_FILE = Path("PACE.csv")
 # Global dataframe variable
 df = None
 
-# Note we can change year span. general df that we run stuff on.
+# Lazard LCOE base costs ($/MWh)
+LCOE = {
+    "coal": 42, "ng": 52, "nuc": 22,
+    "sun": 18, "wnd": 15, "wat": 12, "geo": 88
+}
+
+def calculate_optimal_mix(day_df: pd.DataFrame) -> dict:
+    total = day_df[[
+        "Adjusted WND Gen", "Adjusted SUN Gen", "Adjusted WAT Gen",
+        "Adjusted NUC Gen", "Adjusted NG Gen", "Adjusted COL Gen",
+        "Adjusted GEO Gen"
+    ]].sum().sum()
+
+    if total <= 0:
+        return {k: 0 for k in ["coal", "natural_gas", "nuclear", "solar", "wind", "hydro", "geothermal"]}
+
+    available = {
+        # Weather-dependent — capped at what nature actually provided
+        "wind":        float(day_df["Adjusted WND Gen"].sum()),
+        "solar":       float(day_df["Adjusted SUN Gen"].sum()),
+        "hydro":       float(day_df["Adjusted WAT Gen"].sum()),
+        "geothermal":  float(day_df["Adjusted GEO Gen"].sum()),
+        # Dispatchable — allow up to full demand since they can scale up
+        "nuclear":     total * 0.40,  # nuclear can realistically cover ~40% of grid
+        "natural_gas": total * 0.50,  # gas fills remaining gap
+        "coal":        total * 0.05,  # coal minimized, only emergency backup
+    }
+
+    priority = ["wind", "solar", "hydro", "nuclear", "geothermal", "natural_gas", "coal"]
+    optimal = {}
+    remaining = total
+
+    for source in priority:
+        use = min(available[source], remaining)
+        optimal[source] = use
+        remaining -= use
+        if remaining <= 0:
+            break
+
+    for source in priority:
+        if source not in optimal:
+            optimal[source] = 0.0
+
+    return {k: round(v / total * 100, 1) for k, v in optimal.items()}
+
+
 def load_data():
     global df
 
@@ -92,20 +137,19 @@ def load_data():
     )
 
     cutoff = pd.Timestamp.today().normalize() - pd.Timedelta(days=3)
-    pace_recent = df[
+    df = df[
         (df['Local date'].dt.year >= 2022) &
         (df['Local date'] < cutoff)
     ]
+
 
 # Load data on startup
 @app.on_event("startup")
 def startup_event():
     load_data()
 
+
 def filter_time_range(start: str, end: str) -> pd.DataFrame:
-    """
-    Filters the global dataframe between start and end datetime strings.
-    """
     if df is None:
         raise HTTPException(status_code=500, detail="Dataframe not loaded")
 
@@ -128,18 +172,12 @@ def filter_time_range(start: str, end: str) -> pd.DataFrame:
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PRIMARY ENDPOINT — used by EnergyDashboard.tsx
-# Returns the full DayData shape the frontend expects (hours + avgMix).
-# Weather is intentionally excluded — the frontend fetches it separately
-# via weatherApi.ts → open-meteo.
-#
-# Example: GET /api/energy/2025-01-15
 # ─────────────────────────────────────────────────────────────────────────────
 @app.get("/api/energy/{date}")
 async def get_energy_day(date: str):
     if df is None:
         raise HTTPException(status_code=500, detail="Dataframe not loaded")
 
-    # Filter by Local date (the column we know exists and is already parsed)
     try:
         target_date = pd.to_datetime(date)
     except Exception:
@@ -152,7 +190,6 @@ async def get_energy_day(date: str):
 
     day_df = day_df.reset_index(drop=True)
 
-    # ── Validate required columns exist (same pattern as your other endpoints) ──
     required = [
         "Hour", "Demand", "Demand forecast",
         "CO2 Emissions Generated",
@@ -163,9 +200,8 @@ async def get_energy_day(date: str):
     if missing:
         raise HTTPException(status_code=400, detail=f"Missing columns in CSV: {missing}")
 
-    # ── Build hourly rows ─────────────────────────────────────────────────────
-    # If your CSV has one row per day (not per hour), this will return a single
-    # row. If it has 24 rows per day (hourly), it will return all 24.
+    optimal_mix = calculate_optimal_mix(day_df)
+
     hours = []
     for i, row in day_df.iterrows():
         hour_num = int(row["Hour"]) % 24
@@ -190,7 +226,7 @@ async def get_energy_day(date: str):
             "demand":        round(demand, 2),
             "optimalDemand": round(optimal_demand, 2),
             "savings":       round(savings, 2),
-            # Mix percentages — read from dataframe
+            # Mix percentages
             "coal_pct":        round(col_gen  / total_gen * 100, 1),
             "natural_gas_pct": round(ng_gen   / total_gen * 100, 1),
             "nuclear_pct":     round(nuc_gen  / total_gen * 100, 1),
@@ -198,9 +234,14 @@ async def get_energy_day(date: str):
             "wind_pct":        round(wnd_gen  / total_gen * 100, 1),
             "hydro_pct":       round(wat_gen  / total_gen * 100, 1),
             "geothermal_pct":  round(geo_gen  / total_gen * 100, 1),
-            # Costs — Lazard LCOE constants, no equivalent column in EIA CSV
-            "coal_cost": 42, "natural_gas_cost": 52, "nuclear_cost": 22,
-            "solar_cost": 18, "wind_cost": 15, "hydro_cost": 12, "geothermal_cost": 88,
+            # Weighted cost = base LCOE * share of grid that hour
+            "coal_cost":        round(LCOE["coal"] * (col_gen  / total_gen), 2),
+            "natural_gas_cost": round(LCOE["ng"]   * (ng_gen   / total_gen), 2),
+            "nuclear_cost":     round(LCOE["nuc"]  * (nuc_gen  / total_gen), 2),
+            "solar_cost":       round(LCOE["sun"]  * (sun_gen  / total_gen), 2),
+            "wind_cost":        round(LCOE["wnd"]  * (wnd_gen  / total_gen), 2),
+            "hydro_cost":       round(LCOE["wat"]  * (wat_gen  / total_gen), 2),
+            "geothermal_cost":  round(LCOE["geo"]  * (geo_gen  / total_gen), 2),
         })
 
     energy_keys = ["coal", "natural_gas", "nuclear", "solar", "wind", "hydro", "geothermal"]
@@ -211,21 +252,24 @@ async def get_energy_day(date: str):
     total_co2 = round(float(day_df["CO2 Emissions Generated"].sum()), 2)
 
     return {
-        "hours":  hours,
-        "avgMix": avg_mix,
-        "totalCO2": total_co2,
+        "hours":      hours,
+        "avgMix":     avg_mix,
+        "optimalMix": optimal_mix,
+        "totalCO2":   total_co2,
     }
+
 
 @app.get("/api/debug/columns")
 async def debug_columns():
     if df is None:
         raise HTTPException(status_code=500, detail="Dataframe not loaded")
     return {"columns": df.columns.tolist(), "shape": df.shape}
+
+
 # ─────────────────────────────────────────────────────────────────────────────
-# EXISTING ENDPOINTS (unchanged)
+# EXISTING ENDPOINTS
 # ─────────────────────────────────────────────────────────────────────────────
 
-# Example: /api/peak-demand?start=2025-01-01 00:00:00&end=2025-01-01 23:59:59
 @app.get("/api/peak-demand")
 async def get_peak_demand(start: str, end: str):
     filtered_df = filter_time_range(start, end)
@@ -367,7 +411,6 @@ async def hello():
 async def get_data():
     if df is None:
         raise HTTPException(status_code=500, detail="Dataframe not loaded")
-
     return df.head(10).to_dict(orient="records")
 
 
@@ -375,7 +418,6 @@ async def get_data():
 async def get_columns():
     if df is None:
         raise HTTPException(status_code=500, detail="Dataframe not loaded")
-
     return {"columns": df.columns.tolist()}
 
 
@@ -383,14 +425,11 @@ async def get_columns():
 async def get_summary():
     if df is None:
         raise HTTPException(status_code=500, detail="Dataframe not loaded")
-
-    summary = {
+    return {
         "row_count": len(df),
         "column_count": len(df.columns),
         "columns": df.columns.tolist()
     }
-
-    return summary
 
 
 @app.get("/api/filter")
@@ -402,7 +441,6 @@ async def filter_data(column: str, value: str):
         raise HTTPException(status_code=400, detail=f"Column '{column}' not found")
 
     filtered_df = df[df[column].astype(str) == value]
-
     return filtered_df.to_dict(orient="records")
 
 

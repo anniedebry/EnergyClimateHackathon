@@ -4,10 +4,13 @@ import {
   ENERGY_COLORS,
   ENERGY_LABELS,
   ENERGY_TYPES,
-  OPTIMAL_MIX,
 } from "../data/constants";
 import type { EnergyType, PieLabelProps } from "../types/energy";
 import { colors, font, radius, spacing } from "../theme";
+
+interface OptimalMixPieProps {
+  optimalMix: Record<string, number>;
+}
 
 const PieLabel = ({
   cx = 0,
@@ -36,10 +39,10 @@ const PieLabel = ({
   );
 };
 
-export default function OptimalMixPie() {
+export default function OptimalMixPie({ optimalMix }: OptimalMixPieProps) {
   const pieData = ENERGY_TYPES.map((t) => ({
     name: ENERGY_LABELS[t],
-    value: OPTIMAL_MIX[t],
+    value: optimalMix[t] ?? 0,
     key: t,
   }));
 
@@ -120,7 +123,7 @@ export default function OptimalMixPie() {
                 fontWeight: 500,
               }}
             >
-              {OPTIMAL_MIX[t]}%
+              {optimalMix[t] ?? 0}%
             </span>
           </div>
         ))}

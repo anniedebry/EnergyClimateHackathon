@@ -155,7 +155,7 @@ export default function EnergyDashboard() {
           }}
         >
           <CostEfficiencyChart hours={data.hours} />
-          <OptimalMixPie />
+          <OptimalMixPie optimalMix={data.optimalMix} />
         </div>
 
         {/* Footer */}
