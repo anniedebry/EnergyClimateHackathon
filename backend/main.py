@@ -20,7 +20,7 @@ app.add_middleware(
 )
 
 # Path to your CSV file
-CSV_FILE = Path("..\\PACE.csv")
+CSV_FILE = Path("PACE.csv")
 
 # Global dataframe variable
 df = None
