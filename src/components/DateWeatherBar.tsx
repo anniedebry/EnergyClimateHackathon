@@ -11,6 +11,7 @@ interface DateWeatherBarProps {
   peakHour: string | undefined;
   totalSavings: number;
   avgSavingsPct: number;
+  potentialSavings: number;
 }
 
 export default function DateWeatherBar({
@@ -59,7 +60,7 @@ export default function DateWeatherBar({
           </div>
           <input
             type="date"
-            min="2022-01-01"
+            min="2025-01-01"
             max="2025-12-31"
             value={selectedDate}
             onChange={(e) => onDateChange(e.target.value)}
@@ -76,9 +77,7 @@ export default function DateWeatherBar({
               letterSpacing: 1,
             }}
           />
-          <div style={{ fontSize: font.md, color: colors.textMuted }}>
-            2022 – 2025
-          </div>
+          <div style={{ fontSize: font.md, color: colors.textMuted }}>2025</div>
         </div>
 
         {/* Weather */}
@@ -118,25 +117,14 @@ export default function DateWeatherBar({
               {data.weather.condition}
             </span>
           </div>
-          <div style={{ display: "flex", gap: spacing.lg }}>
-            {(
-              [
-                ["Humidity", `${data.weather.humidity}%`],
-                ["Wind", `${data.weather.wind} mph`],
-              ] as [string, string][]
-            ).map(([k, v]) => (
-              <div key={k}>
-                <span style={{ fontSize: font.md, color: colors.textMuted }}>
-                  {k}:{" "}
-                </span>
-                <span
-                  style={{ fontSize: font.sm, color: colors.textPrimary}}
-                >
-                  {v}
-                </span>
-              </div>
-            ))}
-          </div>
+          <div>
+              <span style={{ fontSize: font.md, color: colors.textMuted }}>
+                Solar Irradiance:{" "}
+              </span>
+              <span style={{ fontSize: font.md, color: colors.textPrimary }}>
+                {data.weather.solarIrradiance} MJ/m²
+              </span>
+            </div>
         </div>
 
         {/* optimization gap */}
@@ -181,7 +169,7 @@ export default function DateWeatherBar({
               textAlign: "center",
             }}
           >
-            {totalSavings.toLocaleString()} MW·h reducible today
+            {totalSavings.toLocaleString()} KW·h reducible today
           </div>
         </div>
 
@@ -198,22 +186,22 @@ export default function DateWeatherBar({
             {
               label: "PEAK DEMAND",
               val: peakDemand.toLocaleString(),
-              unit: "MW",
-              sub: `@ ${peakHour}`,
+              unit: "KW",
+              sub: `Peak Hour: ${peakHour}`,
               color: colors.textPrimary,
             },
             {
-              label: "AVG ACTUAL",
+              label: "GRID AVERAGE",
               val: totalActual.toLocaleString(),
-              unit: "MW",
-              sub: "avg per hour",
+              unit: "KW",
+              sub: "Today's Hourly Avg",
               color: colors.textPrimary,
             },
             {
-              label: "AVG OPTIMAL",
+              label: "SAVINGS",
               val: totalOptimal.toLocaleString(),
-              unit: "MW",
-              sub: "ideal source mix",
+              unit: "$",
+              sub: "Using Optimal Mix",
               color: colors.textPrimary,
             },
           ].map((k, i) => (

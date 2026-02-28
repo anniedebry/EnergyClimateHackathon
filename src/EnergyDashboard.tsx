@@ -9,17 +9,20 @@ import ActualMixPie from "./components/ActualMixPie";
 import CostEfficiencyChart from "./components/CostEfficiencyChart";
 import OptimalMixPie from "./components/OptimalMixPie";
 import { fetchWeather } from "./data/weatherApi";
+import { OPTIMAL_COSTS } from "./data/constants";
 
 export default function EnergyDashboard() {
-  const [selectedDate, setSelectedDate] = useState<string>("2024-07-15");
+  const [selectedDate, setSelectedDate] = useState<string>("2025-01-01");
   const [data, setData] = useState<DayData | null>(null);
-  const [realWeather, setRealWeather] = useState<DayData["weather"] | null>(null);
+  const [realWeather, setRealWeather] = useState<DayData["weather"] | null>(
+    null,
+  );
 
   useEffect(() => {
-  fetchWeather()
-    .then(w => setRealWeather(w))
-    .catch(() => console.log("Weather fetch failed, using generated data"));
-}, []);
+    fetchWeather(selectedDate)
+      .then((w) => setRealWeather(w))
+      .catch(() => console.log("Weather fetch failed"));
+  }, [selectedDate]);
 
   useEffect(() => {
     setData(generateDayData(selectedDate));
@@ -59,6 +62,12 @@ export default function EnergyDashboard() {
   const totalSavings = data.hours.reduce((a, h) => a + h.savings, 0);
   const avgSavingsPct =
     Math.round(((totalActual - totalOptimal) / totalActual) * 1000) / 10;
+  const potentialSavings = Math.round(
+    data.hours.reduce(
+      (acc, h) => acc + h.savings * (OPTIMAL_COSTS.natural_gas / 1000),
+      0,
+    ),
+  );
 
   return (
     <div
@@ -84,6 +93,7 @@ export default function EnergyDashboard() {
           peakHour={peakHour}
           totalSavings={totalSavings}
           avgSavingsPct={avgSavingsPct}
+          potentialSavings={potentialSavings}
         />
 
         {/* Row 1 */}
@@ -135,7 +145,7 @@ export default function EnergyDashboard() {
                 label: "Lazard LCOE+",
                 url: "https://www.lazard.com/media/5tlbhyla/lazards-lcoeplus-june-2025-_vf.pdf",
               },
-              { label: "NOAA Weather", url: "https://www.noaa.gov" },
+              { label: "Weather API", url: "https://open-meteo.com/" },
             ].map(({ label, url }) => (
               <a
                 key={label}
@@ -187,6 +197,7 @@ export default function EnergyDashboard() {
         ::-webkit-scrollbar-thumb { background: ${colors.border}; border-radius: 2px; }
         button { cursor: pointer; }
         button:hover { opacity: 0.75; }
+        * { outline: none; -webkit-tap-highlight-color: transparent; user-select: none; }
       `}</style>
     </div>
   );

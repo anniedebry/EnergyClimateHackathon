@@ -1,4 +1,10 @@
-export type EnergyType = "coal" | "natural_gas" | "nuclear" | "solar" | "wind" | "hydro";
+export type EnergyType =
+  | "coal"
+  | "natural_gas"
+  | "nuclear"
+  | "solar"
+  | "wind"
+  | "hydro";
 
 export type HourData = {
   hour: string;
@@ -7,7 +13,7 @@ export type HourData = {
   optimalDemand: number;
   savings: number;
   [key: string]: number | string;
-}
+};
 
 export type DayData = {
   hours: HourData[];
@@ -15,10 +21,10 @@ export type DayData = {
   weather: {
     temp: number;
     condition: string;
-    humidity: number;
-    wind: number;
+    dayName: string;
+    solarIrradiance: number;
   };
-}
+};
 
 export type TooltipPayloadItem = {
   color?: string;
@@ -27,13 +33,13 @@ export type TooltipPayloadItem = {
   unit?: string;
   dataKey?: string;
   payload?: HourData;
-}
+};
 
 export type TooltipProps = {
   active?: boolean;
   payload?: TooltipPayloadItem[];
   label?: string;
-}
+};
 
 export type PieLabelProps = {
   cx?: number;
@@ -42,4 +48,4 @@ export type PieLabelProps = {
   innerRadius?: number;
   outerRadius?: number;
   value?: number;
-}
+};

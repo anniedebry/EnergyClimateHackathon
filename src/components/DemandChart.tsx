@@ -49,7 +49,7 @@ const DemandTooltip = ({ active, payload, label }: TooltipProps) => {
         <p style={{ color: colors.actual, fontSize: font.lg, margin: "4px 0" }}>
           Actual:{" "}
           <span style={{ color: colors.textPrimary }}>
-            {(actual.value as number).toLocaleString()} MW
+            {(actual.value as number).toLocaleString()} KW
           </span>
         </p>
       )}
@@ -59,7 +59,7 @@ const DemandTooltip = ({ active, payload, label }: TooltipProps) => {
         >
           Optimal:{" "}
           <span style={{ color: colors.textPrimary }}>
-            {(optimal.value as number).toLocaleString()} MW
+            {(optimal.value as number).toLocaleString()} KW
           </span>
         </p>
       )}
@@ -73,7 +73,7 @@ const DemandTooltip = ({ active, payload, label }: TooltipProps) => {
             paddingTop: spacing.xs,
           }}
         >
-          ↓ {gap.toLocaleString()} MW reducible
+          ↓ {gap.toLocaleString()} KW reducible
         </p>
       )}
     </div>
@@ -87,8 +87,8 @@ export default function DemandChart({
 }: DemandChartProps) {
   return (
     <ChartCard
-      label="Grid Demand — Actual vs Optimal Mix"
-      subtitle="What we're using vs what we could be using at the cheapest source ratio"
+      label="Grid Demand: Actual vs Optimal Mix"
+      subtitle="Current usage vs lowest-cost alternative. Hover for comparison details"
       badge="OPTIMIZATION VIEW"
       badgeColor={colors.optimal}
     >
@@ -171,6 +171,7 @@ export default function DemandChart({
               fill: colors.textMuted,
               fontSize: font.sm,
               fontFamily: font.family,
+              dy: 10,
             }}
             tickLine={false}
             axisLine={{ stroke: colors.border }}
@@ -184,7 +185,7 @@ export default function DemandChart({
             }}
             tickLine={false}
             axisLine={false}
-            unit=" MW"
+            unit=" KW"
             width={70}
           />
           <Tooltip content={<DemandTooltip />} />
@@ -251,7 +252,7 @@ export default function DemandChart({
         </span>
         <span style={{ fontSize: font.sm, color: colors.optimal }}>
           ↓ <strong>{avgSavingsPct}%</strong> avg reduction ·{" "}
-          <strong>{totalSavings.toLocaleString()}</strong> MW·h reducible today
+          <strong>{totalSavings.toLocaleString()}</strong> KW·h reducible today
         </span>
       </div>
     </ChartCard>

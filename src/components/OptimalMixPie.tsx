@@ -47,7 +47,7 @@ export default function OptimalMixPie() {
     <ChartCard
       label="Optimal Mix"
       labelColor={colors.optimal}
-      subtitle="Ideal source % weighted by lowest cost"
+      subtitle="Ideal energy blend based on lowest cost per KWh"
     >
       <ResponsiveContainer width="100%" height={200}>
         <PieChart>
