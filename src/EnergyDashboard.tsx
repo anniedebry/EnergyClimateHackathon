@@ -329,7 +329,7 @@ export default function EnergyDashboard() {
     setActiveCost(prev => prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t]);
 
   return (
-    <div style={{ background: "#060B18", minHeight: "100vh", color: "#E2E8F0", fontFamily: "'IBM Plex Mono', 'Courier New', monospace" }}>
+    <div style={{ background: "#060B18", minHeight: "100vh", color: "#E2E8F0", fontFamily: "'IBM Plex Mono', 'Courier New', monospace", width: "100%"}}>
 
       {/* HEADER */}
       <div style={{ borderBottom: "1px solid #0D1C30", padding: "13px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#070C18" }}>
@@ -525,6 +525,7 @@ export default function EnergyDashboard() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@100;300;400&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body, #root { width: 100%; margin: 0; padding: 0; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.2) sepia(1) saturate(6) hue-rotate(100deg); cursor: pointer; }
         ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: #060B18; } ::-webkit-scrollbar-thumb { background: #1E3A5F; }
