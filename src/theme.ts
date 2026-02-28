@@ -1,44 +1,49 @@
 export const colors = {
   // Backgrounds
-  bgBase:       "#060B18",
-  bgCard:       "#0A0F1E",
-  bgHeader:     "#070C18",
+  bgBase: "#0D1A0F",
+  bgCard: "#1F3524",
+  bgHeader: "#0A1510",
 
   // Borders
-  border:       "#1E3A5F",
-  borderDim:    "#0D1C30",
+  border: "#31694E",
+  borderDim: "#1E3D28",
 
   // Text
-  textPrimary:  "#F1F5F9",
-  textSecondary:"#94A3B8",
-  textMuted:    "#64748B",
-  textDim:      "#475569",
+  textPrimary: "#D4E8C2",
+  textSecondary: "#D4E84A",
+  textMuted: "#8FB840",
+  textDim: "#4A7A3A",
 
   // Accents
-  green:        "#00FF88",
-  purple:       "#A78BFA",
-  orange:       "#F97316",
-  cyan:         "#22D3EE",
-  teal:         "#34D399",
+  actual: "#FF6B6B",
+  optimal: "#00FF87",
+  orange: "#F0E491",
+  cyan: "#658C58",
+  optimalGap: "#FF7A00",
 
-  // Energy sources
-  coal:         "#9CA3AF",
-  natural_gas:  "#F59E0B",
-  nuclear:      "#A78BFA",
-  solar:        "#FB923C",
-  wind:         "#22D3EE",
-  hydro:        "#60A5FA",
+  coal: "#A0704A", 
+  natural_gas: "#FF8C00", 
+  nuclear: "#B060E0", 
+  solar: "#FFE600", 
+  wind: "#30D878",
+  hydro: "#0077CC",
 } as const;
 
 export const font = {
-  family:   "'IBM Plex Mono', 'Courier New', monospace",
-  xs:       10,
-  sm:       11,
-  md:       13,
-  lg:       15,
-  xl:       20,
-  xxl:      34,
-  hero:     64,
+  family: "'DM Sans', sans-serif",
+  weight: {
+    light: 500,
+    regular: 700,
+    medium: 800,
+    bold: 1000,
+  },
+  xs: 12,
+  sm: 13,
+  md: 15,
+  lg: 17,
+  xl: 22,
+  xxl: 44,
+  hero: 80,
 } as const;
 
 export const radius = {
@@ -48,9 +53,9 @@ export const radius = {
 } as const;
 
 export const spacing = {
-  xs:  8,
-  sm:  12,
-  md:  16,
-  lg:  24,
-  xl:  40,
+  xs: 8,
+  sm: 12,
+  md: 16,
+  lg: 24,
+  xl: 40,
 } as const;

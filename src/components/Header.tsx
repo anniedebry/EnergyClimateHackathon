@@ -13,11 +13,12 @@ export default function Header() {
       <div style={{ display: "flex", alignItems: "center", gap: spacing.md }}>
         <div style={{
           width: 10, height: 10, borderRadius: "50%",
-          background: colors.green, boxShadow: `0 0 14px ${colors.green}`,
+          background: colors.actual,
+          boxShadow: `0 0 8px ${colors.actual}, 0 0 20px ${colors.actual}60`,
           animation: "pulse 2s infinite", flexShrink: 0,
         }} />
         <div>
-          <div style={{ fontSize: font.lg, color: colors.textPrimary, letterSpacing: 2, fontWeight: 400 }}>
+          <div style={{ fontSize: font.lg, color: colors.textPrimary, letterSpacing: 2, fontWeight: 500 }}>
             SALT LAKE CITY GRID INTELLIGENCE
           </div>
           <div style={{ fontSize: font.sm, color: colors.textMuted, letterSpacing: 1, marginTop: 2 }}>
@@ -26,11 +27,11 @@ export default function Header() {
         </div>
       </div>
       <div style={{
-        background: `${colors.green}12`,
-        border: `1px solid ${colors.green}40`,
+        background: `${colors.actual}20`,
+        border: `1px solid ${colors.actual}60`,
         padding: `6px ${spacing.md}px`,
         borderRadius: radius.sm,
-        fontSize: font.xs, color: colors.green, letterSpacing: 2,
+        fontSize: font.xs, color: colors.actual, letterSpacing: 2,
       }}>
         GOVERNMENT & UTILITY USE
       </div>

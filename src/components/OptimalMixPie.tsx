@@ -21,29 +21,31 @@ export default function OptimalMixPie() {
   const pieData = ENERGY_TYPES.map(t => ({ name: ENERGY_LABELS[t], value: OPTIMAL_MIX[t], key: t }));
 
   return (
-    <ChartCard label="Optimal Mix Distribution" subtitle="Ideal source % weighted by lowest cost" badge="★ OPTIMAL" badgeColor={colors.purple}>
-      <ResponsiveContainer width="100%" height={160}>
+    <ChartCard label="Optimal Mix Distribution" subtitle="Ideal source % weighted by lowest cost" badge="★ OPTIMAL" badgeColor={colors.optimal}>
+      <ResponsiveContainer width="100%" height={200}>
         <PieChart>
-          <Pie data={pieData} cx="50%" cy="50%" innerRadius={42} outerRadius={72} dataKey="value" labelLine={false} label={PieLabel}>
+          <Pie data={pieData} cx="50%" cy="50%" innerRadius={35} outerRadius={95} dataKey="value" labelLine={false} label={PieLabel}>
             {pieData.map((e, i) => <Cell key={i} fill={ENERGY_COLORS[e.key as EnergyType]} fillOpacity={0.9} />)}
           </Pie>
           <Tooltip
             formatter={(v) => [`${v}%`]}
             contentStyle={{ background: colors.bgCard, border: `1px solid ${colors.border}`, fontFamily: font.family, fontSize: font.md, borderRadius: radius.md }}
+            itemStyle={{ color: colors.textSecondary }}
+            labelStyle={{ color: colors.textPrimary }}
           />
         </PieChart>
       </ResponsiveContainer>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: `6px ${spacing.md}px`, marginTop: spacing.sm }}>
         {ENERGY_TYPES.map(t => (
-          <div key={t} style={{ display: "flex", alignItems: "center", gap: spacing.xs }}>
+          <div key={t} style={{ display: "flex", alignItems: "center", gap: spacing.xs, justifyContent: "center" }}>
             <div style={{ width: 8, height: 8, borderRadius: radius.sm / 2, background: ENERGY_COLORS[t], flexShrink: 0 }} />
             <span style={{ fontSize: font.sm, color: colors.textMuted }}>{ENERGY_LABELS[t]}</span>
-            <span style={{ fontSize: font.sm, color: colors.purple, marginLeft: "auto", fontWeight: 500 }}>{OPTIMAL_MIX[t]}%</span>
+            <span style={{ fontSize: font.sm, color: colors.optimal, fontWeight: 500 }}>{OPTIMAL_MIX[t]}%</span>
           </div>
         ))}
       </div>
-      <div style={{ marginTop: spacing.sm, padding: `${spacing.xs}px 14px`, background: `${colors.purple}0A`, border: `1px solid ${colors.purple}25`, borderRadius: radius.md }}>
-        <span style={{ fontSize: font.sm, color: `${colors.purple}AA` }}>
+      <div style={{ marginTop: spacing.sm, padding: `${spacing.xs}px 14px`, background: `${colors.optimal}0A`, border: `1px solid ${colors.optimal}25`, borderRadius: radius.md }}>
+        <span style={{ fontSize: font.sm, color: `${colors.optimal}AA` }}>
           Cheapest sources (hydro, wind, solar) given highest ideal share
         </span>
       </div>
