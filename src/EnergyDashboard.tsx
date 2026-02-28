@@ -8,10 +8,18 @@ import DemandChart from "./components/DemandChart";
 import ActualMixPie from "./components/ActualMixPie";
 import CostEfficiencyChart from "./components/CostEfficiencyChart";
 import OptimalMixPie from "./components/OptimalMixPie";
+import { fetchWeather } from "./data/weatherApi";
 
 export default function EnergyDashboard() {
   const [selectedDate, setSelectedDate] = useState<string>("2024-07-15");
   const [data, setData] = useState<DayData | null>(null);
+  const [realWeather, setRealWeather] = useState<DayData["weather"] | null>(null);
+
+  useEffect(() => {
+  fetchWeather()
+    .then(w => setRealWeather(w))
+    .catch(() => console.log("Weather fetch failed, using generated data"));
+}, []);
 
   useEffect(() => {
     setData(generateDayData(selectedDate));
@@ -69,7 +77,7 @@ export default function EnergyDashboard() {
         <DateWeatherBar
           selectedDate={selectedDate}
           onDateChange={setSelectedDate}
-          data={data}
+          data={{ ...data, weather: realWeather ?? data.weather }}
           totalActual={totalActual}
           totalOptimal={totalOptimal}
           peakDemand={peakDemand}
@@ -119,7 +127,10 @@ export default function EnergyDashboard() {
         >
           <div style={{ display: "flex", gap: spacing.md }}>
             {[
-              { label: "U.S. Energy Information Administration", url: "https://www.eia.gov/electricity/gridmonitor/dashboard/electric_overview/balancing_authority/PACE" },
+              {
+                label: "U.S. Energy Information Administration",
+                url: "https://www.eia.gov/electricity/gridmonitor/dashboard/electric_overview/balancing_authority/PACE",
+              },
               {
                 label: "Lazard LCOE+",
                 url: "https://www.lazard.com/media/5tlbhyla/lazards-lcoeplus-june-2025-_vf.pdf",
