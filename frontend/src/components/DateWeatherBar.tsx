@@ -169,7 +169,7 @@ export default function DateWeatherBar({
               textAlign: "center",
             }}
           >
-            {totalSavings.toLocaleString()} KW·h reducible today
+            {totalSavings.toLocaleString()} MW·h reducible today
           </div>
         </div>
 
@@ -186,14 +186,14 @@ export default function DateWeatherBar({
             {
               label: "PEAK DEMAND",
               val: peakDemand.toLocaleString(),
-              unit: "KW",
+              unit: "MW",
               sub: `Peak Hour: ${peakHour}`,
               color: colors.textPrimary,
             },
             {
               label: "GRID AVERAGE",
               val: totalActual.toLocaleString(),
-              unit: "KW",
+              unit: "MW",
               sub: "Today's Hourly Avg",
               color: colors.textPrimary,
             },

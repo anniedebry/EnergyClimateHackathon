@@ -47,7 +47,7 @@ const CostTooltip = ({ active, payload, label }: TooltipProps) => {
           {p.name}:{" "}
           <span style={{ color: colors.textPrimary }}>
             {typeof p.value === "number" ? p.value.toLocaleString() : p.value}{" "}
-            $/KWh
+            $/MWh
           </span>
         </p>
       ))}
@@ -67,7 +67,7 @@ export default function CostEfficiencyChart({
   return (
     <ChartCard
       label="Cost Efficiency"
-      subtitle="Price per KWh by source. Click source to filter, hover for comparison details"
+      subtitle="Price per MWh by source. Click source to filter, hover for comparison details"
       badge="DAILY USAGE"
       badgeColor={colors.textSecondary}
     >

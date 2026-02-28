@@ -18,14 +18,44 @@ export default function EnergyDashboard() {
     null,
   );
 
+  // Weather fetch via open-meteo — completely independent, unchanged
   useEffect(() => {
     fetchWeather(selectedDate)
       .then((w) => setRealWeather(w))
       .catch(() => console.log("Weather fetch failed"));
   }, [selectedDate]);
 
+  // Energy data — tries FastAPI backend first, falls back to generateDayData
+  // if the backend is unreachable so the app always works
   useEffect(() => {
-    setData(generateDayData(selectedDate));
+    fetch(`http://localhost:8000/api/energy/${selectedDate}`)
+      .then((res) => {
+        if (!res.ok) throw new Error(`Backend returned ${res.status}`);
+        return res.json();
+      })
+      .then((backendData) => {
+        // Backend returns { hours, avgMix } with no weather field.
+        // We supply a stub weather object so the DayData type is satisfied;
+        // it gets overwritten immediately by realWeather in the render below.
+        setData({
+          ...backendData,
+          weather: {
+            temp: 0,
+            condition: "Unknown",
+            dayName: new Date(selectedDate).toLocaleDateString("en-US", {
+              weekday: "long",
+            }),
+            solarIrradiance: 0,
+          },
+        });
+      })
+      .catch((err) => {
+        console.warn(
+          "Backend unavailable, falling back to generated data:",
+          err.message,
+        );
+        setData(generateDayData(selectedDate));
+      });
   }, [selectedDate]);
 
   if (!data)
@@ -83,6 +113,8 @@ export default function EnergyDashboard() {
       <div
         style={{ padding: `${spacing.lg}px ${spacing.xl}px ${spacing.xl}px` }}
       >
+        {/* realWeather overwrites the stub weather from the backend response.
+            If open-meteo hasn't responded yet, data.weather is used as fallback. */}
         <DateWeatherBar
           selectedDate={selectedDate}
           onDateChange={setSelectedDate}
