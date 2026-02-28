@@ -138,11 +138,7 @@ export default function EnergyDashboard() {
             marginBottom: spacing.md,
           }}
         >
-          <DemandChart
-            hours={hoursWithGap}
-            avgSavingsPct={avgSavingsPct}
-            totalSavings={totalSavings}
-          />
+          <CostEfficiencyChart hours={data.hours} />
           <ActualMixPie avgMix={data.avgMix} />
         </div>
 
@@ -154,7 +150,11 @@ export default function EnergyDashboard() {
             gap: spacing.md,
           }}
         >
-          <CostEfficiencyChart hours={data.hours} />
+          <DemandChart
+            hours={hoursWithGap}
+            avgSavingsPct={avgSavingsPct}
+            totalSavings={totalSavings}
+          />
           <OptimalMixPie optimalMix={data.optimalMix} />
         </div>
 
