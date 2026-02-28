@@ -60,7 +60,7 @@ export default function DateWeatherBar({
           </div>
           <input
             type="date"
-            min="2025-01-01"
+            min="2021-01-01"
             max="2025-12-31"
             value={selectedDate}
             onChange={(e) => onDateChange(e.target.value)}

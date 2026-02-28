@@ -57,7 +57,7 @@ export default function Header() {
               marginTop: 2,
             }}
           >
-            Created by Andrew Vasquez, Annie DeBry, Cameron Kato, Ian Whatley,
+            Created by Andrew Vasquez, Annie de Bry, Cameron Kato, Ian Whatley,
             and Samantha Shiba
           </div>
         </div>
