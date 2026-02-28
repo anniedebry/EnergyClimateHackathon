@@ -4,7 +4,8 @@ export type EnergyType =
   | "nuclear"
   | "solar"
   | "wind"
-  | "hydro";
+  | "hydro"
+  | "geothermal";
 
 export type HourData = {
   hour: string;

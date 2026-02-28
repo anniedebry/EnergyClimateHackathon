@@ -1,3 +1,4 @@
+
 export const colors = {
   // Backgrounds
   bgBase: "#0D1A0F",
@@ -21,12 +22,13 @@ export const colors = {
   cyan: "#658C58",
   optimalGap: "#FF7A00",
 
-  coal: "#A0704A", 
-  natural_gas: "#FF8C00", 
-  nuclear: "#B060E0", 
-  solar: "#FFE600", 
+  coal: "#A0704A",
+  natural_gas: "#FF8C00",
+  nuclear: "#B060E0",
+  solar: "#FFE600",
   wind: "#30D878",
   hydro: "#0077CC",
+  geothermal: "#FF4500",
 } as const;
 
 export const font = {

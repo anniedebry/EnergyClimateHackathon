@@ -72,6 +72,7 @@ export function generateDayData(dateStr: string): DayData {
       solar: solarAvail * (0.08 + rng() * 0.06),
       wind: windVar * 0.1,
       hydro: 0.05 + rng() * 0.03,
+      geothermal:  0.03 + rng() * 0.02,
     };
     const total = Object.values(mix).reduce((a, b) => a + b, 0);
     (Object.keys(mix) as EnergyType[]).forEach(

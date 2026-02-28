@@ -1,7 +1,7 @@
 import type { EnergyType } from "../types/energy";
 import { colors } from "../theme";
 
-export const ENERGY_TYPES: EnergyType[] = ["coal", "natural_gas", "nuclear", "solar", "wind", "hydro"];
+export const ENERGY_TYPES: EnergyType[] = ["coal", "natural_gas", "nuclear", "solar", "wind", "hydro", "geothermal"];
 
 export const ENERGY_COLORS: Record<EnergyType, string> = {
   coal:        colors.coal,
@@ -10,6 +10,7 @@ export const ENERGY_COLORS: Record<EnergyType, string> = {
   solar:       colors.solar,
   wind:        colors.wind,
   hydro:       colors.hydro,
+  geothermal:  colors.geothermal,
 };
 
 export const ENERGY_LABELS: Record<EnergyType, string> = {
@@ -19,6 +20,7 @@ export const ENERGY_LABELS: Record<EnergyType, string> = {
   solar:       "Solar",
   wind:        "Wind",
   hydro:       "Hydro",
+  geothermal: "Geothermal",
 };
 
 export const OPTIMAL_COSTS: Record<EnergyType, number> = {
@@ -28,6 +30,7 @@ export const OPTIMAL_COSTS: Record<EnergyType, number> = {
   solar:       18,
   wind:        15,
   hydro:       12,
+  geothermal:  88,
 };
 
 const inverseSum = ENERGY_TYPES.reduce((s, t) => s + 1 / OPTIMAL_COSTS[t], 0);
