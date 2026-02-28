@@ -35,19 +35,31 @@ export default function EnergyDashboard() {
   const avgSavingsPct = Math.round(((totalActual - totalOptimal) / totalActual) * 1000) / 10;
 
   return (
-    <div style={{ background: "#060B18", minHeight: "100vh", color: "#E2E8F0", fontFamily: "'IBM Plex Mono', 'Courier New', monospace", width: "100%"}}>
+    <div style={{
+      background: colors.bgBase,
+      minHeight: "100vh",
+      color: colors.textPrimary,
+      fontFamily: font.family,
+    }}>
+      <Header />
 
-      {/* HEADER */}
-      <div style={{ borderBottom: "1px solid #0D1C30", padding: "13px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#070C18" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#00FF88", boxShadow: "0 0 10px #00FF88", animation: "pulse 2s infinite" }} />
-          <span style={{ fontSize: 10, color: "#00FF88", letterSpacing: 3 }}>SALT LAKE CITY  ·  GRID INTELLIGENCE PLATFORM</span>
-          <span style={{ color: "#0D1C30" }}>|</span>
-          <span style={{ fontSize: 9, color: "#1E3A5F", letterSpacing: 2 }}>Utah Energy Analytics</span>
-        </div>
-        <div style={{ display: "flex", gap: 20 }}>
-          <span style={{ fontSize: 8, color: "#1E3A5F", letterSpacing: 2 }}>ROCKY MOUNTAIN POWER TERRITORY</span>
-          <span style={{ fontSize: 8, color: "#1E3A5F", letterSpacing: 2 }}>GOVERNMENT & UTILITY USE</span>
+      <div style={{ padding: `${spacing.lg}px ${spacing.xl}px ${spacing.xl}px` }}>
+        <DateWeatherBar
+          selectedDate={selectedDate}
+          onDateChange={setSelectedDate}
+          data={data}
+          totalActual={totalActual}
+          totalOptimal={totalOptimal}
+          peakDemand={peakDemand}
+          peakHour={peakHour}
+          totalSavings={totalSavings}
+          avgSavingsPct={avgSavingsPct}
+        />
+
+        {/* Row 1 */}
+        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: spacing.md, marginBottom: spacing.md }}>
+          <DemandChart hours={data.hours} avgSavingsPct={avgSavingsPct} totalSavings={totalSavings} />
+          <ActualMixPie avgMix={data.avgMix} />
         </div>
 
         {/* Row 2 */}
@@ -72,9 +84,9 @@ export default function EnergyDashboard() {
       </div>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@100;300;400&display=swap');
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body, #root { width: 100%; margin: 0; padding: 0; }
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
+        html, body, #root { width: 100%; min-height: 100vh; margin: 0; padding: 0; }
+        * { box-sizing: border-box; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
         input[type="date"]::-webkit-calendar-picker-indicator {
           filter: invert(0.3) sepia(1) saturate(3) hue-rotate(40deg); cursor: pointer;
