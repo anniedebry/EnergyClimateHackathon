@@ -135,7 +135,7 @@ export default function OptimalMixPie() {
         }}
       >
         <span style={{ fontSize: font.md, color: `${colors.optimal}AA` }}>
-          Cheapest sources (hydro, wind, solar) given highest ideal share
+          Lowest-cost source blend that meets demand while maintaining grid stability
         </span>
       </div>
     </ChartCard>
